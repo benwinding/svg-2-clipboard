@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     return;
   }
   getSvgString(clickedEl).then(svgString => {
-    console.log({ svgString });
+    // console.log({ svgString });
     if (!svgString) {
       return;
     }
@@ -19,7 +19,8 @@ document.addEventListener(
   "mousedown",
   function(event) {
     //right click
-    if (event.button == 2) {
+    const isRightButton = event.button == 2;
+    if (isRightButton) {
       clickedEl = event.target;
     }
   },

@@ -1,19 +1,11 @@
-// Copyright (c) 2010 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
+function cpy(o) {
+  return JSON.parse(JSON.stringify(o));
+}
 // A generic onclick callback function.
 function genericOnClick(info, tab) {
-  function cpy(o) {
-    return JSON.parse(JSON.stringify(o));
-  }
-  console.log("clicked item: ", { menuItemId: info.menuItemId });
-  console.log("info: ", { info: cpy(info) });
-  console.log("tab: ", { tab: cpy(tab) });
-
   chrome.tabs.sendMessage(tab.id, "getClickedEl", function(svgString) {
     copyTextToClipboard(svgString);
-    console.log({svgString})
+    // console.log({svgString})
   });
 }
 
