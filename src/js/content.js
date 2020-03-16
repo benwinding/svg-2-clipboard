@@ -16,14 +16,22 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 document.addEventListener(
-  "contextmenu",
+  "mousedown",
   function(event) {
-    clickedEl = event.target;
+    const rightClick = event.button == 2;
+    if (rightClick) {
+      clickedEl = event.target;
+    } else {
+      clickedEl = null;
+    }
   },
   true
 );
 
 async function getSvgString(el) {
+  if (!el) {
+    return null;
+  }
   const couldbeInSvg = svgTags.includes(el.tagName);
   if (couldbeInSvg) {
     return tryGetFromSvg(el);
