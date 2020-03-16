@@ -4,14 +4,12 @@
   "name": "SVG 2 Clipboard",
   "short_name": "SVG-2-Clipboard",
   "homepage_url": "https://github.com/benwinding/svg-2-clipboard",
-  "options_page": "options.html",
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": [
-      "vendor/axios.min.js",
-      "js/content.js"
-    ]
-  }],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"]
+    }
+  ],
   "background": {
     "scripts": ["js/background.js"]
   },
@@ -23,11 +21,5 @@
     "128": "img/favicon-128x128.png",
     "32": "img/favicon-32x32.png"
   },
-  "permissions": [
-    "storage",
-    "tabs",
-    "contextMenus",
-    "<all_urls>"
-  ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'" 
+  "permissions": ["tabs", "contextMenus"]
 }
