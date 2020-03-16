@@ -1,6 +1,6 @@
-# SVG 2 Clipboard
+# SVG 2 Clipboard (Browser Extension)
 
-A simple chrome extension to help copy SVG's directly from the web!
+A simple browser extension to help copy SVG's directly from the web!
 
 ## Capabilities
 
@@ -10,7 +10,7 @@ A simple chrome extension to help copy SVG's directly from the web!
 
 ## Screenshot
 
-![screenshot](https://github.com/benwinding/svg-2-clipboard/blob/master/src/img/favicon-16x16.png)
+![screenshot](https://i.imgur.com/nFWiIT1.png)
 
 ## Development
 
