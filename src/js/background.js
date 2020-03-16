@@ -1,21 +1,24 @@
 // A generic onclick callback function.
 function genericOnClick(info, tab) {
   chrome.tabs.sendMessage(tab.id, "getClickedEl", function(svgString) {
-    console.log('found svg string!', {svgString})
+    console.log("found svg string!", { svgString });
     copyTextToClipboard(svgString);
   });
 }
 
 // Create one test item for each context type.
-const contexts = ["page", "selection", "link", "image"];
-chrome.contextMenus.removeAll()
+const contexts = [
+  { c: "page", label: "Element" },
+  { c: "image", label: "Image" }
+];
+chrome.contextMenus.removeAll();
 for (let context of contexts) {
-  const title = `Copy SVG (${context})`;
+  const title = `Copy SVG (${context.label})`;
   const id = title;
   chrome.contextMenus.create({
     id: id,
     title: title,
-    contexts: [context],
+    contexts: [context.c],
     onclick: genericOnClick
   });
 }

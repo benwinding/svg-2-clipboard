@@ -16,13 +16,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 document.addEventListener(
-  "mousedown",
+  "contextmenu",
   function(event) {
-    //right click
-    const isRightButton = event.button == 2;
-    if (isRightButton) {
-      clickedEl = event.target;
-    }
+    clickedEl = event.target;
   },
   true
 );
@@ -44,7 +40,7 @@ async function tryGetFromSvg(el) {
   while (!!currentEl && currentEl.tagName != "svg" && currentEl.parentElement) {
     currentEl = currentEl.parentElement;
   }
-  if (currentEl.tagName == "svg") {
+  if (!!currentEl && currentEl.tagName == "svg") {
     return currentEl.outerHTML;
   }
   return null;
