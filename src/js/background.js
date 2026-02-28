@@ -1,50 +1,33 @@
-// A generic onclick callback function.
-function genericOnClick(info, tab) {
-  chrome.tabs.sendMessage(tab.id, "getClickedEl", function(svgString) {
-    console.log("found svg string!", { svgString });
-    copyTextToClipboard(svgString);
+function setupContextMenus() {
+  // Create one test item for each context type.
+  const contexts = [
+    { c: "page", label: "Element" },
+    { c: "image", label: "Image" }
+  ];
+  chrome.contextMenus.removeAll(() => {
+    for (const context of contexts) {
+      const title = `Copy SVG (${context.label})`;
+      chrome.contextMenus.create({
+        id: title,
+        title: title,
+        contexts: [context.c]
+      });
+    }
   });
 }
 
-// Create one test item for each context type.
-const contexts = [
-  { c: "page", label: "Element" },
-  { c: "image", label: "Image" }
-];
-chrome.contextMenus.removeAll();
-for (let context of contexts) {
-  const title = `Copy SVG (${context.label})`;
-  const id = title;
-  chrome.contextMenus.create({
-    id: id,
-    title: title,
-    contexts: [context.c],
-    onclick: genericOnClick
+function handleContextClick(info, tab) {
+  if (!tab || !tab.id) {
+    return;
+  }
+  chrome.tabs.sendMessage(tab.id, "getClickedEl", function(response) {
+    if (!response || !response.svgString) {
+      return;
+    }
+    console.log("found svg string!", { svgString: response.svgString });
   });
 }
 
-function copyTextToClipboard(text) {
-  //Create a textbox field where we can insert text to.
-  const copyFrom = document.createElement("textarea");
-
-  //Set the text content to be the text you wished to copy.
-  copyFrom.textContent = text;
-
-  //Append the textbox field into the body as a child.
-  //"execCommand()" only works when there exists selected text, and the text is inside
-  //document.body (meaning the text is part of a valid rendered HTML element).
-  document.body.appendChild(copyFrom);
-
-  //Select all the text!
-  copyFrom.select();
-
-  //Execute command
-  document.execCommand("copy");
-
-  //(Optional) De-select the text using blur().
-  copyFrom.blur();
-
-  //Remove the textbox field from the document.body, so no other JavaScript nor
-  //other elements can get access to this.
-  document.body.removeChild(copyFrom);
-}
+chrome.runtime.onInstalled.addListener(setupContextMenus);
+chrome.runtime.onStartup.addListener(setupContextMenus);
+chrome.contextMenus.onClicked.addListener(handleContextClick);
