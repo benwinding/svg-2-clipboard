@@ -1,7 +1,6 @@
 const babel = require("gulp-babel");
 const del = require("del");
 const gulp = require("gulp");
-const gulpSequence = require("gulp-sequence");
 const imagemin = require("gulp-imagemin");
 const jsonTransform = require("gulp-json-transform");
 const rename = require("gulp-rename");
@@ -68,17 +67,16 @@ gulp.task("manifest", function() {
     .pipe(gulp.dest(conf.output.dir));
 });
 
-gulp.task("copy-code", gulpSequence("scripts", ["images", "manifest"]));
+gulp.task("copy-code", gulp.parallel("scripts", "images", "manifest"));
 
-gulp.task("watch", ["copy-code"], function() {
-  gulp.watch(conf.src.scripts, event => {
-    gulpSequence("scripts")(err => {
-      if (err) console.log(err);
-    });
-  });
-  gulp.watch(conf.src.images, ["images"]);
-  gulp.watch(conf.src.manifest, ["manifest"]);
-});
+gulp.task(
+  "watch",
+  gulp.series("copy-code", function() {
+    gulp.watch(conf.src.scripts, gulp.series("scripts"));
+    gulp.watch(conf.src.images, gulp.series("images"));
+    gulp.watch(conf.src.manifest, gulp.series("manifest"));
+  })
+);
 
 gulp.task("zip", function() {
   return gulp
@@ -87,6 +85,6 @@ gulp.task("zip", function() {
     .pipe(gulp.dest("./"));
 });
 
-gulp.task("build", gulpSequence("clean", "copy-code", "zip"));
+gulp.task("build", gulp.series("clean", "copy-code", "zip"));
 
-gulp.task("default", ["build"]);
+gulp.task("default", gulp.series("build"));
