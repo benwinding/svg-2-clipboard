@@ -1,6 +1,6 @@
 {
   "name": "SVG-2-Clipboard",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "A chrome extension to copy the clicked svg element to the clipboard!",
   "scripts": {
     "build": "yarn build-firefox && yarn build-chrome && yarn zip-src",
